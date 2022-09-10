@@ -17,20 +17,24 @@ local bitsObjectDistributionGrle = 8
 
 
 local useBit = 1
-local factor = 2000000          --Higher => more tries and longer time to run the script.
-local objectRadius = 10         --Handles distance between objects.
+local factor = 75000                -- Higher => more tries and longer time to run the script.
+local objectRadius = 10             -- Handles distance between objects.
+
+-- Set Active Template 
+local activeTemplate = 0            -- Set active template to use for object distribution.
+local resultName = "result"         -- Set name for result transform containing your placed objects.
 
 -- Rotation Setting Boolean
-local randomYRotation = false   -- Set to true if you want random Y rotation.
-local randomRotation = true     -- Set to true if you want random X, Y, Z rotation.
-                                -- Set Both to false if you want 0 rotation.
+local randomYRotation = true        -- Set to true if you want random Y rotation.
+local randomRotation = false        -- Set to true if you want random X, Y, Z rotation.
+                                    -- Set Both to false if you want 0 rotation.
 
 -- Scale Settings Booleans
-local sameScale = false         -- Set to true if you want the same scale for X, Y, Z but random for each child.
-local differentScale = true     -- Set to true if you want random scale for X, Y, Z for each child.
+local sameScale = false             -- Set to true if you want the same scale for X, Y, Z but random for each child.
+local differentScale = false        -- Set to true if you want random scale for X, Y, Z for each child.
 
 -- Scale Settings Values
-local randomScaleMin = 0.8      -- Scale each stone/object in the same scale between the set values.
+local randomScaleMin = 0.8          -- Scale each stone/object in the same scale between the set values.
 local randomScaleMax = 2.7
 
 -- Different Scale values for  X, Y, Z
@@ -59,6 +63,7 @@ if not loadBitVectorMapFromFile(grle, distributionArea, bitsObjectDistributionGr
     return;
 end
 
+
 function createRandomPosition()
     local h1 = math.random(-terrainSize / 2, terrainSize / 2)
     local l1 = math.random(1, 9)
@@ -72,9 +77,12 @@ function createRandomPosition()
     return x, y, z
 end
 
+local rootNode = getChildAt( getRootNode(), 0 )
+local resultTg = createTransformGroup(resultName)
 local parentTg = getSelection(0)
-local templateTg = getChildAt(parentTg, 0)
+local templateTg = getChildAt(parentTg, activeTemplate)
 local numTemplates = getNumOfChildren(templateTg)
+link(rootNode , resultTg)
 
 local allObjects = {}
 
@@ -98,7 +106,7 @@ for i=1,factor do
     if canSet and value == useBit and canPlaceObject(x,z) then
         local templateNum = math.random(0, numTemplates-1)
         local newObject = clone(getChildAt(templateTg, templateNum), false, true)
-        link(parentTg, newObject)
+        link(resultTg, newObject)
 
         local rotX = math.random( ) * 2 * math.pi
         local rotY = math.random( ) * 2 * math.pi
