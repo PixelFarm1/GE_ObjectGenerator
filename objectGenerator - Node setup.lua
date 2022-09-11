@@ -5,13 +5,13 @@
 -- Hide: no
 
 local rootNode = getChildAt(getRootNode(), 0)
-local resultTg = createTransformGroup("objectsToDistribute")
-link(rootNode, resultTg)
+local objectTg = createTransformGroup("objectsToDistribute")
+link(rootNode, objectTg)
 
 local template0 = createTransformGroup("Template 0")
 local template1 = createTransformGroup("Template 1")
 
-link(resultTg, template0)
-link(resultTg, template1)
+link(objectTg, template0)
+link(objectTg, template1)
 
 print("Nodes have been set up. You can now add objects to the templates!")
