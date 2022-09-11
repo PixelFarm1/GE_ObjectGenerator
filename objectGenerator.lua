@@ -6,7 +6,7 @@
 
 --VARIABLES--
 --Path
-local distributionArea = "C:/Users/Willis/Documents/My Games/FarmingSimulator2022/mods/FS22_Idala/maps/map/data/treeGenerator.grle"
+local distributionArea = "C:/Users/xxx/Documents/My Games/FarmingSimulator2022/mods/FS22_xxx/maps/map/data/objectGenerator.grle"
 
 
 -------------------
