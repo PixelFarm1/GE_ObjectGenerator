@@ -22,7 +22,7 @@ When this is done you can save and open GE and check for errors. Everything shou
 
 Unless you have already placed the objectGenerator.lua file in your scripts folder. You are now to create a new script. Simply press Scripts  Create New Script and give it a name. Copy and paste the lua script from GitHub. Proceed with editing the filepath at the top of the script. This must match the path to your objectGenerator.png. 
 
-Before running the script, you need to define what objects are to be placed by the script. This needs to follow a very specific structure in GE to work. For this we have created a template transform group that you can use. Run the objectGenerator - Node setup.lua or Download the templateTG.i3d from GitHub and import it to your map! 
+Before running the script, you need to define what objects are to be placed by the script. This needs to follow a very specific structure in GE to work. For this we have created a template transform group that you can use. Run the objectGenerator - Node setup.lua to set up the nodes automatically or download the templateTG.i3d from GitHub and import it to your map! 
 
 **It is very important that you use this exact structure and that the objectsToDistribute transform group is not embedded within any other transform group!**
 
