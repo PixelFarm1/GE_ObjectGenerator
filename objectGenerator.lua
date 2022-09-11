@@ -1,4 +1,4 @@
--- Author: PixelFarm, Oscar_8599
+-- Author: PixelFarm & Oscar_8599
 -- Name: ObjectGenerator
 -- Description: Objects Distribution from bitMap
 -- Icon:
@@ -6,7 +6,8 @@
 
 --VARIABLES--
 --Path
-local distributionArea = "C:/Users/XXX/Documents/My Games/FarmingSimulator2022/mods/FS22_XXX/maps/map/data/objectGenerator.grle"
+local distributionArea = "C:/Users/Willis/Documents/My Games/FarmingSimulator2022/mods/FS22_Idala/maps/map/data/treeGenerator.grle"
+
 
 -------------------
 -----SETTINGS------
@@ -16,40 +17,44 @@ local bitsObjectDistributionGrle = 8
 
 
 
-local useBit = 1                    -- Change only if you have multiple channels painted and need to change channel. 
-local factor = 750000               -- Higher => more tries and longer time to run the script.
-local objectRadius = 10             -- Handles distance between objects.
+local useBit = 1 -- Change only if you have multiple channels painted and need to change channel.
+local factor = 750000 -- Higher => more tries and longer time to run the script.
+local objectRadius = 10 -- Handles distance between objects.
 
--- Set Active Template 
-local activeTemplate = 0            -- Set active template to use for object distribution.
-local resultName = "result"         -- Set name for result transform containing your placed objects.
+-- Set Active Template
+local activeTemplate = 0 -- Set active template to use for object distribution.
+local resultName = "result" -- Set name for result transform containing your placed objects.
 
 -- Rotation Setting Boolean
-local randomYRotation = true        -- Set to true if you want random Y rotation.
-local randomRotation = false        -- Set to true if you want random X, Y, Z rotation.
-                                    -- Set Both to false if you want 0 rotation.
+local randomYRotation = true -- Set to true if you want random Y rotation.
+local randomRotation = false -- Set to true if you want random X, Y, Z rotation.
+-- Set Both to false if you want 0 rotation.
 
 -- Scale Settings Booleans
-local sameScale = false             -- Set to true if you want the same scale for X, Y, Z but random for each child.
-local differentScale = false        -- Set to true if you want random scale for X, Y, Z for each child.
+local sameScale = false -- Set to true if you want the same scale for X, Y, Z but random for each child.
+local differentScale = false -- Set to true if you want random scale for X, Y, Z for each child.
 
 -- Scale Settings Values
-local randomScaleMin = 0.8          -- Scale each stone/object in the same scale between the set values.
+local randomScaleMin = 0.8 -- Scale each stone/object in the same scale between the set values.
 local randomScaleMax = 2.7
 
 -- Different Scale values for  X, Y, Z
-local randomScaleXMin = 0.8     -- Scale X between the set values.
-local randomScaleXMax = 2.7     -- Scale X between the set values.
+local randomScaleXMin = 0.8 -- Scale X between the set values.
+local randomScaleXMax = 2.7 -- Scale X between the set values.
 
-local randomScaleYMin = 0.7     -- Scale Y between the set values.
-local randomScaleYMax = 3       -- Scale Y between the set values.
+local randomScaleYMin = 0.7 -- Scale Y between the set values.
+local randomScaleYMax = 3 -- Scale Y between the set values.
 
-local randomScaleZMin = 0.9     -- Scale Z between the set values.
-local randomScaleZMax = 2       -- Scale Z between the set values.
+local randomScaleZMin = 0.9 -- Scale Z between the set values.
+local randomScaleZMax = 2 -- Scale Z between the set values.
 
 --------------------
 --NO CHANGES BELOW--
 --------------------
+
+local function printf(formatString, ...)
+    print(string.format(formatString, ...))
+end
 
 --Terrain
 local terrain = getChild(getChildAt(getRootNode(), 0), "terrain")
@@ -76,9 +81,8 @@ function createRandomPosition()
     return x, y, z
 end
 
-local rootNode = getChildAt( getRootNode(), 0 )
+local rootNode = getChildAt(getRootNode(), 0)
 local parentTg = 0
-local numTemplates = 0
 
 for i = 0, getNumOfChildren(rootNode) - 1 do
     local correctName = getChildAt(rootNode, i)
@@ -89,15 +93,27 @@ for i = 0, getNumOfChildren(rootNode) - 1 do
 end
 
 if (parentTg == 0) then
-   print("Error: Template node not found. Node needs to be named 'objectsToDistribute'.")
-   return nil
+    print("Error: Template node not found. Node needs to be named 'objectsToDistribute'.")
+    return
 end
 
+if getNumOfChildren(parentTg) == 0 or getNumOfChildren(parentTg) < (activeTemplate + 1) or activeTemplate < 0 then
+    printf("Error: Could not find any template matching node index %d, the total number of child nodes (possible templates) was %d"
+        , activeTemplate, getNumOfChildren(parentTg))
+    return
+end
+
+local templateTg = getChildAt(parentTg, activeTemplate)
+local numTemplates = (templateTg > 0 and getNumOfChildren(templateTg)) or 0
+
+
+if numTemplates == 0 then
+    print("Error: The selected template contains no objects!")
+    return
+end
 
 local resultTg = createTransformGroup(resultName)
-local templateTg = getChildAt(parentTg, activeTemplate)
-local numTemplates = getNumOfChildren(templateTg)
-link(rootNode , resultTg)
+link(rootNode, resultTg)
 
 local allObjects = {}
 
@@ -112,31 +128,31 @@ function canPlaceObject(x, z)
     return true
 end
 
-for i=1,factor do
+for i = 1, factor do
     local x, y, z = createRandomPosition()
-    local value = getBitVectorMapPoint(grle, x + terrainSize/2, z + terrainSize/2, 0, bitsObjectDistributionGrle)
-    
+    local value = getBitVectorMapPoint(grle, x + terrainSize / 2, z + terrainSize / 2, 0, bitsObjectDistributionGrle)
+
     local canSet = true
 
-    if canSet and value == useBit and canPlaceObject(x,z) then
-        local templateNum = math.random(0, numTemplates-1)
+    if canSet and value == useBit and canPlaceObject(x, z) then
+        local templateNum = math.random(0, numTemplates - 1)
         local newObject = clone(getChildAt(templateTg, templateNum), false, true)
         link(resultTg, newObject)
 
-        local rotX = math.random( ) * 2 * math.pi
-        local rotY = math.random( ) * 2 * math.pi
-        local rotZ = math.random( ) * 2 * math.pi
-        local randomScaleSame = math.random(randomScaleMin/0.01, randomScaleMax/0.01)
-        local scaleX = math.random(randomScaleXMin/0.01, randomScaleXMax/0.01)
-        local scaleY = math.random(randomScaleYMin/0.01, randomScaleYMax/0.01)
-        local scaleZ = math.random(randomScaleZMin/0.01, randomScaleZMax/0.01)
+        local rotX = math.random() * 2 * math.pi
+        local rotY = math.random() * 2 * math.pi
+        local rotZ = math.random() * 2 * math.pi
+        local randomScaleSame = math.random(randomScaleMin / 0.01, randomScaleMax / 0.01)
+        local scaleX = math.random(randomScaleXMin / 0.01, randomScaleXMax / 0.01)
+        local scaleY = math.random(randomScaleYMin / 0.01, randomScaleYMax / 0.01)
+        local scaleZ = math.random(randomScaleZMin / 0.01, randomScaleZMax / 0.01)
 
-        setTranslation(newObject, x,y,z)
+        setTranslation(newObject, x, y, z)
 
         if sameScale == true and differentScale == false then
-            setScale(newObject, randomScaleSame*0.01, randomScaleSame*0.01, randomScaleSame*0.01)
+            setScale(newObject, randomScaleSame * 0.01, randomScaleSame * 0.01, randomScaleSame * 0.01)
         elseif differentScale == true and sameScale == false then
-            setScale(newObject, scaleX*0.01, scaleY*0.01, scaleZ*0.01)
+            setScale(newObject, scaleX * 0.01, scaleY * 0.01, scaleZ * 0.01)
         elseif differentScale == true and sameScale == true then
             setScale(newObject, 1, 1, 1)
         end
@@ -151,8 +167,7 @@ for i=1,factor do
             setRotation(newObject, 0, 0, 0)
         end
 
-        table.insert(allObjects, {x=x, z=z})
+        table.insert(allObjects, { x = x, z = z })
     end
 end
 print(#allObjects .. " Objects placed!")
-
