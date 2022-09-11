@@ -1,4 +1,4 @@
--- Author: PixelFarm & Oscar_8599
+-- Author: PixelFarm, Oscar_8599
 -- Name: ObjectGenerator
 -- Description: Objects Distribution from bitMap
 -- Icon:
@@ -6,8 +6,7 @@
 
 --VARIABLES--
 --Path
-local distributionArea = "C:/Users/xxx/Documents/My Games/FarmingSimulator2022/mods/FS22_xxx/maps/map/data/objectGenerator.grle"
-
+local distributionArea = "C:/Users/XXX/Documents/My Games/FarmingSimulator2022/mods/FS22_XXX/maps/map/data/objectGenerator.grle"
 
 -------------------
 -----SETTINGS------
@@ -35,7 +34,7 @@ local sameScale = false -- Set to true if you want the same scale for X, Y, Z bu
 local differentScale = false -- Set to true if you want random scale for X, Y, Z for each child.
 
 -- Scale Settings Values
-local randomScaleMin = 0.8 -- Scale each stone/object in the same scale between the set values.
+local randomScaleMin = 0.8 -- Scale each object in the scale between the set values.
 local randomScaleMax = 2.7
 
 -- Different Scale values for  X, Y, Z
@@ -98,14 +97,22 @@ if (parentTg == 0) then
 end
 
 if getNumOfChildren(parentTg) == 0 or getNumOfChildren(parentTg) < (activeTemplate + 1) or activeTemplate < 0 then
-    printf("Error: Could not find any template matching node index %d, the total number of child nodes (possible templates) was %d"
-        , activeTemplate, getNumOfChildren(parentTg))
-    return
+    if getNumOfChildren(parentTg) == 1 then
+        printf("Error: Could not find any template matching node index %d, the total number of child nodes (possible templates) was %d (index %d)"
+            , activeTemplate, getNumOfChildren(parentTg), 0)
+        return
+        elseif getNumOfChildren(parentTg) == 0 then
+        print("No templates found!")
+        return
+        else
+        printf("Error: Could not find any template matching node index %d, the total number of child nodes (possible templates) was %d (index %d-%d)"
+            , activeTemplate, getNumOfChildren(parentTg), 0, getNumOfChildren(parentTg)-1)
+        return
+    end
 end
 
 local templateTg = getChildAt(parentTg, activeTemplate)
 local numTemplates = (templateTg > 0 and getNumOfChildren(templateTg)) or 0
-
 
 if numTemplates == 0 then
     print("Error: The selected template contains no objects!")
@@ -115,7 +122,9 @@ end
 local resultTg = createTransformGroup(resultName)
 link(rootNode, resultTg)
 
+
 local allObjects = {}
+
 
 function canPlaceObject(x, z)
     for _, object in pairs(allObjects) do
