@@ -16,8 +16,8 @@ local bitsObjectDistributionGrle = 8
 
 
 
-local useBit = 1
-local factor = 75000                -- Higher => more tries and longer time to run the script.
+local useBit = 1                    -- Change only if you have multiple channels painted and need to change channel. 
+local factor = 750000               -- Higher => more tries and longer time to run the script.
 local objectRadius = 10             -- Handles distance between objects.
 
 -- Set Active Template 
@@ -63,7 +63,6 @@ if not loadBitVectorMapFromFile(grle, distributionArea, bitsObjectDistributionGr
     return;
 end
 
-
 function createRandomPosition()
     local h1 = math.random(-terrainSize / 2, terrainSize / 2)
     local l1 = math.random(1, 9)
@@ -78,8 +77,24 @@ function createRandomPosition()
 end
 
 local rootNode = getChildAt( getRootNode(), 0 )
+local parentTg = 0
+local numTemplates = 0
+
+for i = 0, getNumOfChildren(rootNode) - 1 do
+    local correctName = getChildAt(rootNode, i)
+    if (getName(correctName) == "objectsToDistribute") then
+        parentTg = correctName
+        break
+    end
+end
+
+if (parentTg == 0) then
+   print("Error: Template node not found. Node needs to be named 'objectsToDistribute'.")
+   return nil
+end
+
+
 local resultTg = createTransformGroup(resultName)
-local parentTg = getSelection(0)
 local templateTg = getChildAt(parentTg, activeTemplate)
 local numTemplates = getNumOfChildren(templateTg)
 link(rootNode , resultTg)
@@ -140,3 +155,4 @@ for i=1,factor do
     end
 end
 print(#allObjects .. " Objects placed!")
+
