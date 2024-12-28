@@ -1,5 +1,7 @@
 # GE_ObjectGenerator
 
+## 2024-12-28: Updated for GE10
+
 This script adds the possibility of generating objects in an area that is defined with a bitmap (infolayer) in Giants Editor. The inbuilt function of mesh painting in GE is not sufficient for all cases of use, since it often places objects too close to each other and it lacks some quality-of-life features such as easy iterations with an erase function etc. 
 
 # How do I prepare my FS22 map for this script?
