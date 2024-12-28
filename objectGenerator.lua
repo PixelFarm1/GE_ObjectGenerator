@@ -22,6 +22,11 @@ local randomYRotation = true -- Set to true if you want random Y rotation.
 local randomRotation = false -- Set to true if you want random X, Y, Z rotation.
 -- Set Both to false if you want 0 rotation.
 
+-- Different Rotation values for  X, Z
+local randomRotXMax = 3.0 -- Rotate X this much at most.
+local randomRotZMax = 3.0 -- Rotate Z this much at most.
+
+
 -- Scale Settings Booleans
 local sameScale = false -- Set to true if you want the same scale for X, Y, Z but random for each child.
 local differentScale = false -- Set to true if you want random scale for X, Y, Z for each child.
@@ -130,12 +135,12 @@ end
 
 function applyRandomRotation(object)
     if randomYRotation and not randomRotation then
-        setRotation(object, 0, math.random() * 2 * math.pi, 0)
+        setRotation(object, 0, math.random(0, 360) * math.pi / 180 , 0)
     elseif randomRotation then
         setRotation(object,
-            math.random() * 2 * math.pi,
-            math.random() * 2 * math.pi,
-            math.random() * 2 * math.pi
+            (0 + (randomRotXMax - 0) * math.random()) * math.pi / 180,
+            math.random(0, 360) * math.pi / 180,
+            (0 + (randomRotZMax - 0) * math.random()) * math.pi / 180
         )
     else
         setRotation(object, 0, 0, 0)
