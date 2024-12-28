@@ -6,7 +6,7 @@
 
 --VARIABLES--
 --Path
-local distributionArea = "C:/Users/XXX/Documents/My Games/FarmingSimulator2022/mods/FS22_XXX/maps/map/data/objectGenerator.grle"
+local distributionArea = "C:/Users/XXX/Documents/My Games/FarmingSimulator2025/mods/FS25_XXX/maps/map/data/objectGenerator.grle"
 source("editorUtils.lua")
 
 -------------------
