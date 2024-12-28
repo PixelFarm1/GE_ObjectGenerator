@@ -1,36 +1,47 @@
 -- Author: PixelFarm, Oscar_8599
 -- Name: ObjectGenerator
--- Description: Objects Distribution from bitMap
+-- Description: Improved Objects Distribution with Bitmap Control and Radius Enforcement
 -- Icon:
 -- Hide: no
-
---VARIABLES--
---Path
-local distributionArea = "C:/Users/XXX/Documents/My Games/FarmingSimulator2025/mods/FS25_XXX/maps/map/data/objectGenerator.grle"
+-- AlwaysLoaded: no
 source("editorUtils.lua")
 
--------------------
------SETTINGS------
--------------------
+-- VARIABLES --
+local distributionArea = "C:/Users/XXX/Documents/My Games/FarmingSimulator2025/mods/FS25_XXX/maps/data/objectGenerator.grle"
 
-local bitsObjectDistributionGrle = 8
-local useBit = 1
-local factor = 300000
+local useBit = 1 -- Change only if you have multiple channels painted and need to change channel.
+local factor = 300000 -- Higher => more tries and longer time to run the script.
 local objectRadius = 8 -- Minimum distance between objects
-local activeTemplate = 0
-local resultName = "result"
-local randomYRotation = true
-local randomRotation = false
-local sameScale = false
-local differentScale = false
-local randomScaleMin = 2
+
+-- Set Active Template
+local activeTemplate = 0 -- Set active template to use for object distribution.
+local resultName = "result" -- Set name for result transform containing your placed objects.
+
+-- Rotation Setting Boolean
+local randomYRotation = true -- Set to true if you want random Y rotation.
+local randomRotation = false -- Set to true if you want random X, Y, Z rotation.
+-- Set Both to false if you want 0 rotation.
+
+-- Scale Settings Booleans
+local sameScale = false -- Set to true if you want the same scale for X, Y, Z but random for each child.
+local differentScale = false -- Set to true if you want random scale for X, Y, Z for each child.
+
+-- Scale Settings Values
+local randomScaleMin = 2 -- Scale each object in the scale between the set values.
 local randomScaleMax = 8
-local randomScaleXMin = 0.8
-local randomScaleXMax = 2.7
-local randomScaleYMin = 0.7
-local randomScaleYMax = 3
-local randomScaleZMin = 0.9
-local randomScaleZMax = 2
+
+-- Different Scale values for  X, Y, Z
+local randomScaleXMin = 0.8 -- Scale X between the set values.
+local randomScaleXMax = 2.7 -- Scale X between the set values.
+
+local randomScaleYMin = 0.7 -- Scale Y between the set values.
+local randomScaleYMax = 3 -- Scale Y between the set values.
+
+local randomScaleZMin = 0.9 -- Scale Z between the set values.
+local randomScaleZMax = 2 -- Scale Z between the set values.
+
+
+local bitsObjectDistributionGrle = 8 -- You should never have to change this
 local gridSize = objectRadius -- Set grid size to match object radius
 
 -- FUNCTIONS --
